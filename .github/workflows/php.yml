@@ -1,0 +1,40 @@
+name: PHP CI/CD Workflow - Ramstore POS (php.v3Cashier)
+
+on:
+  push:
+    branches: [ "main", "master", "develop" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  php-lint-and-verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.1', '8.2']
+
+    steps:
+      - name: Checkout kode repositori
+        uses: actions/checkout@v4
+
+      - name: Siapkan lingkungan PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl, pdo, pdo_mysql, pdo_sqlite, json, zlib
+          coverage: none
+
+      - name: Validasi sintaks seluruh file PHP aplikasi
+        run: |
+          find app public -name "*.php" -print0 | xargs -0 -n1 -P4 php -l
+
+      - name: Validasi struktur konfigurasi Composer
+        run: composer validate --no-check-all --strict
+
+      - name: Instal dependensi Composer
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Periksa kesiapan direktori writable dan backup
+        run: |
+          mkdir -p writable/backups writable/logs writable/session writable/cache
+          chmod -R 775 writable
