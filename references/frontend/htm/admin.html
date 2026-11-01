@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - POS Cashier</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-brand">
+        <span>v2cashier Admin Dashboard</span>
+      </div>
+      <div class="nav-actions">
+        <span id="adminName" style="font-size: 0.85rem; color: #6b7280"
+          >Welcome, JordanGantentXYZ</span
+        >
+        <a href="index.html" class="btn btn-sm">Cashier</a>
+        <button class="btn btn-sm btn-danger" id="logoutBtn">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Admin Layout -->
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <div class="admin-sidebar">
+        <nav class="sidebar-nav">
+          <button class="sidebar-link active" data-tab="dashboard">
+            Dashboard
+          </button>
+          <button class="sidebar-link" data-tab="products">Products</button>
+          <button class="sidebar-link" data-tab="transactions">
+            Transactions
+          </button>
+          <button class="sidebar-link" data-tab="categories">Categories</button>
+        </nav>
+      </div>
+
+      <!-- Content -->
+      <div class="admin-content">
+        <!-- Dashboard Tab -->
+        <div class="admin-tab active" id="tab-dashboard">
+          <h2
+            style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem"
+          >
+            Dashboard
+          </h2>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid" id="statsGrid">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Two column layout for recent & bestsellers -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 1.5rem;
+              margin-bottom: 2rem;
+            "
+          >
+            <!-- Recent Transactions -->
+            <div class="card">
+              <div class="section-header">
+                <h3 class="section-title">Recent Transactions</h3>
+              </div>
+              <div style="overflow-x: auto">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Amount</th>
+                      <th>Items</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentTxnBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Best Sellers -->
+            <div class="card">
+              <div class="section-header">
+                <h3 class="section-title">Best Selling Products</h3>
+              </div>
+              <div style="overflow-x: auto">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Sold</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bestsellersBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inventory Overview -->
+          <div class="card">
+            <div class="section-header">
+              <h3 class="section-title">Inventory Overview</h3>
+            </div>
+            <div style="overflow-x: auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Tab -->
+        <div class="admin-tab" id="tab-products">
+          <div class="section-header">
+            <h2 style="font-size: 1.5rem; font-weight: 700">Products</h2>
+            <button class="btn btn-dark" id="addProductBtn">
+              + Add Product
+            </button>
+          </div>
+
+          <div class="card">
+            <div style="overflow-x: auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions Tab -->
+        <div class="admin-tab" id="tab-transactions">
+          <h2
+            style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem"
+          >
+            Transactions
+          </h2>
+
+          <div class="card">
+            <div style="overflow-x: auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Total</th>
+                    <th>Items</th>
+                    <th>Payment</th>
+                    <th>Change</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Categories Tab -->
+        <div class="admin-tab" id="tab-categories">
+          <div class="section-header">
+            <h2 style="font-size: 1.5rem; font-weight: 700">Categories</h2>
+            <button class="btn btn-dark" id="addCategoryBtn">
+              Add Category
+            </button>
+          </div>
+
+          <div class="card">
+            <div style="overflow-x: auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Products</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody id="categoriesTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal-overlay" id="productModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="productModalTitle">Add Product</h3>
+          <button class="modal-close" onclick="closeProductModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <form id="productForm">
+            <input type="hidden" id="productId" />
+            <div class="form-group">
+              <label class="form-label">Product Name *</label>
+              <input type="text" id="productName" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select id="productCategory" class="form-input" required>
+                <option value="">Select category</option>
+              </select>
+            </div>
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem"
+            >
+              <div class="form-group">
+                <label class="form-label">Price ($) *</label>
+                <input
+                  type="number"
+                  id="productPrice"
+                  class="form-input"
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Stock *</label>
+                <input
+                  type="number"
+                  id="productStock"
+                  class="form-input"
+                  min="0"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Image URL (optional)</label>
+              <input
+                type="text"
+                id="productImage"
+                class="form-input"
+                placeholder="path/to/image.jpg"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeProductModal()">Cancel</button>
+          <button class="btn btn-dark" id="saveProductBtn">Save Product</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div class="modal-overlay" id="categoryModal">
+      <div class="modal" style="max-width: 400px">
+        <div class="modal-header">
+          <h3>Add Category</h3>
+          <button class="modal-close" onclick="closeCategoryModal()">X</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Category Name</label>
+            <input
+              type="text"
+              id="categoryName"
+              class="form-input"
+              placeholder="Enter category name"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeCategoryModal()">Cancel</button>
+          <button class="btn btn-dark" id="saveCategoryBtn">Saev</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="../js/admin.js"></script>
+  </body>
+</html>
