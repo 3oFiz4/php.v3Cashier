@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+// jalankan antarmuka baris perintah spark codeigniter 4 dan utilitas backup terjadwal
+
+define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR);
+chdir(__DIR__);
+
+require __DIR__ . '/app/Config/Paths.php';
+$paths = new Config\Paths();
+
+$command = $argv[1] ?? 'help';
+
+// eksekusi perintah kustom backup database terjadwal
+if ($command === 'db:backup') {
+    require_once __DIR__ . '/app/Config/Database.php';
+    require_once __DIR__ . '/app/Libraries/BackupService.php';
+    $service = new App\Libraries\BackupService();
+    $result = $service->createCompressedBackup('Scheduled_Cron', null);
+    echo json_encode($result, JSON_PRETTY_PRINT) . PHP_EOL;
+    exit($result['success'] ? 0 : 1);
+}
+
+echo "Ramstore POS CLI (CodeIgniter 4 Spark Runner)\n";
+echo "Perintah tersedia:\n";
+echo "  php spark serve       Jalankan server pengembangan lokal pada port 8080\n";
+echo "  php spark migrate     Jalankan migrasi skema database ramstore_pos\n";
+echo "  php spark db:seed     Isi data awal (Admin, Kasir, Barang, Batch, Promo)\n";
+echo "  php spark db:backup   Buat arsip cadangan database terkompresi (.sql.gz)\n";
+
+if ($command === 'serve') {
+    $host = 'localhost';
+    $port = 8080;
+    echo "Menjalankan server Ramstore POS pada http://{$host}:{$port}\n";
+    passthru("php -S {$host}:{$port} -t public");
+}

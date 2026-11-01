@@ -1,0 +1,28 @@
+# konfigurasi lingkungan aplikasi ramstore pos ci4
+CI_ENVIRONMENT = development
+
+app.baseURL = 'http://localhost:8080/'
+app.indexPage = ''
+app.defaultLocale = 'id'
+app.appTimezone = 'Asia/Makassar'
+
+database.default.hostname = localhost
+database.default.database = ramstore_pos
+database.default.username = root
+database.default.password = 
+database.default.DBDriver = MySQLi
+database.default.DBPrefix =
+database.default.port = 3306
+database.default.charset = utf8mb4
+database.default.DBCollat = utf8mb4_unicode_ci
+
+# konfigurasi kustom operasional minimarket ramstore
+pos.storeName = 'Ramstore Minimarket'
+pos.storeAddress = 'Jl. Raya Denpasar No. 88, Bali'
+pos.storePhone = '0361-889900'
+pos.receiptPrefix = 'RMS'
+pos.lowStockDefault = 15
+pos.expiryWarningDays = 3
+pos.qrisMerchantName = 'RAMSTORE MINIMARKET BALI'
+pos.qrisMerchantNmid = 'ID1026008899001'
+pos.backupRetentionDays = 30
