@@ -1,0 +1,29 @@
+flowchart TD
+    %% Authentication, Role Guard, and Supervisor PIN Override Flowchart
+    Start(["Mulai Permintaan Autentikasi / Otorisasi"]) --> InputCred[/"Terima Input JSON: username & password / PIN"/]
+    InputCred --> ValidateEmpty{"Input Kosong?"}
+    ValidateEmpty -- "Ya" --> Err400["Kirim HTTP 400: Kredensial Wajib Diisi"] --> EndNode(["Selesai"])
+    ValidateEmpty -- "Tidak" --> CheckRoute{"Jenis Endpoint?"}
+
+    CheckRoute -- "POST /api/auth/login" --> QueryAdmin["AdminModel::findByUsername(username)"]
+    QueryAdmin --> IsAdminMatch{"Akun Admin Ditemukan &\npassword_verify Valid?"}
+    IsAdminMatch -- "Ya" --> SetAdminSess["Set Session: role='admin', logged_in=true"]
+    SetAdminSess --> LogAdmin["AuditLogger::log('auth', 'LOGIN_ADMIN')"]
+    LogAdmin --> RedirectAdmin[/"Return JSON redirect: '/admin'"/] --> EndNode
+
+    IsAdminMatch -- "Tidak" --> QueryKasir["KasirModel::findByUsername(username)"]
+    QueryKasir --> IsKasirMatch{"Akun Kasir Aktif &\npassword_verify Valid?"}
+    IsKasirMatch -- "Ya" --> SetKasirSess["Set Session: role='kasir', shift=kasir.shift, logged_in=true"]
+    SetKasirSess --> LogKasir["AuditLogger::log('auth', 'LOGIN_KASIR')"]
+    LogKasir --> RedirectPos[/"Return JSON redirect: '/pos'"/] --> EndNode
+
+    IsKasirMatch -- "Tidak" --> LogFail["AuditLogger::log('auth', 'LOGIN_FAILED')"]
+    LogFail --> Err401["Kirim HTTP 401: Kredensial Tidak Valid"] --> EndNode
+
+    CheckRoute -- "POST /api/auth/verify-supervisor" --> VerifyPin["AdminModel::verifySupervisorPin(supervisor_username, pin)"]
+    VerifyPin --> IsPinValid{"Hash PIN Supervisor Cocok?"}
+    IsPinValid -- "Tidak" --> LogReject["AuditLogger::log('otorisasi_void', 'REJECT_VOID_PIN')"]
+    LogReject --> Err403["Kirim HTTP 403: PIN Supervisor Tidak Valid"] --> EndNode
+    IsPinValid -- "Ya" --> InsertVoid["Simpan Record ke Tabel otorisasi_void"]
+    InsertVoid --> LogApprove["AuditLogger::log('otorisasi_void', 'APPROVE_VOID_PIN')"]
+    LogApprove --> ReturnAuth[/"Return JSON authorized: true"/] --> EndNode

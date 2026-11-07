@@ -1,0 +1,20 @@
+flowchart TD
+    %% Purchase Order, Stock Opname Variance, and Gross Profit Margin Analytics
+    subgraph Purchase_Order_Flow ["1. Penerimaan Faktur Purchase Order (PO Pemasok)"]
+        PO_In[/"Input Faktur PO: Pemasok, Barang, Jml Kemasan, Isi/Kemasan, Harga Beli, Tgl Exp"/] --> CalcUnits["total_unit = jumlah_kemasan * unit_per_kemasan\ntotal_biaya = total_unit * harga_beli_satuan"]
+        CalcUnits --> SavePO["INSERT INTO pembelian_stok & detail_pembelian_stok"]
+        SavePO --> IncStock["UPDATE barang SET stok = stok + total_unit, harga_beli = harga_beli_satuan"]
+        IncStock --> GenBatch["INSERT INTO batch_barang (stok_tersedia = total_unit, tanggal_kadaluarsa)"]
+    end
+
+    subgraph Stock_Opname_Flow ["2. Stok Opname & Pelacakan Selisih Fisik"]
+        Opn_In[/"Input ID Barang & Jumlah Hitung Fisik Rak"/] --> ReadSys["Ambil stok_sistem & harga_beli dari Tabel barang"]
+        ReadSys --> CalcVar["selisih_unit = stok_fisik - stok_sistem\nnominal_selisih = selisih_unit * harga_beli"]
+        CalcVar --> SaveOpn["INSERT INTO stok_opname & UPDATE barang SET stok = stok_fisik"]
+    end
+
+    subgraph Margin_Analytics_Flow ["3. Analitik Laba Kotor (Gross Profit & Margin)"]
+        An_Req(["GET /api/admin/analytics/margin"]) --> AggSQL["Agregasi detail_transaksi JOIN transaksi (status='Completed')"]
+        AggSQL --> CalcProfit["laba_kotor = SUM(subtotal - (harga_beli_satuan * jumlah))\nmargin_persen = (laba_kotor / pendapatan_bersih) * 100"]
+        CalcProfit --> GroupOut[/"Return Analitik per Kategori & per Produk"/]
+    end

@@ -1,0 +1,49 @@
+flowchart TD
+    %% Formal Software Architecture Diagram - Ramstore POS (CodeIgniter 4 MVC)
+    subgraph Client_Layer ["Presentation & Client Layer (Browser / Terminal POS)"]
+        UI_Login["app/Views/auth/login.php\n+ public/assets/js/login.js"]
+        UI_POS["app/Views/kasir/pos.php\n+ pos_app.js + cart.js + barcode_shortcuts.js"]
+        UI_Admin["app/Views/admin/dashboard.php\n+ admin_app.js"]
+        Theme_CSS["public/assets/css/style.css\n+ public/assets/js/theme.js (Dark/Light)"]
+    end
+
+    subgraph Routing_Filter_Layer ["Front Controller, Routing & Security Filter Layer"]
+        FrontCtrl["public/index.php & app/Config/Routes.php"]
+        AuthFlt["app/Filters/AuthFilter.php\n(Role Guard: admin / kasir)"]
+        AuditFlt["app/Filters/AuditFilter.php\n(Mutation Interceptor)"]
+    end
+
+    subgraph Controller_Layer ["CodeIgniter 4 Controller Layer (app/Controllers)"]
+        AuthCtrl["AuthController.php"]
+        PosCtrl["KasirPosController.php"]
+        DashCtrl["AdminDashboardController.php"]
+        BarangCtrl["MasterBarangController.php"]
+        UserCtrl["MasterUserController.php"]
+        OpsCtrl["OperasionalController.php"]
+    end
+
+    subgraph Domain_Libraries ["Business Logic & Domain Service Libraries (app/Libraries)"]
+        PromoLib["PromoEngine.php\n(Bundle_Pair / Min_Qty_Cut / Percent)"]
+        FefoLib["FefoAllocator.php\n(First-Expired First-Out Batch Deductor)"]
+        QrisLib["QrisGenerator.php\n(EMVCo Dynamic QRIS & CRC16)"]
+        AuditLib["AuditLogger.php\n(Immutable JSON Diff & IP Logger)"]
+        BackupLib["BackupService.php\n(Zlib .sql.gz Archiver & CLI Spark)"]
+    end
+
+    subgraph Model_Data_Layer ["Relational Model & Persistence Layer (app/Models & MySQL InnoDB)"]
+        M_Master["AdminModel / KasirModel\nJenisBarangModel / BarangModel"]
+        M_Txn["TransaksiModel / DetailTransaksiModel\nShiftRekonModel / TransaksiTertundaModel\nOtorisasiVoidModel"]
+        M_Inv["BatchBarangModel / PemasokModel\nPembelianStokModel / StokOpnameModel\nPromosiBundlingModel"]
+        M_Sys["LogAuditModel / RiwayatBackupModel"]
+        DB[("MySQL Database: ramstore_pos\n15 Relational InnoDB Tables")]
+    end
+
+    UI_Login & UI_POS & UI_Admin --> FrontCtrl
+    FrontCtrl --> AuthFlt
+    AuthFlt --> AuthCtrl & PosCtrl & DashCtrl & BarangCtrl & UserCtrl & OpsCtrl
+    PosCtrl --> PromoLib & FefoLib & QrisLib & AuditLib
+    BarangCtrl & UserCtrl & OpsCtrl --> AuditLib
+    OpsCtrl --> BackupLib
+    AuthCtrl & PosCtrl & DashCtrl & BarangCtrl & UserCtrl & OpsCtrl --> M_Master & M_Txn & M_Inv & M_Sys
+    M_Master & M_Txn & M_Inv & M_Sys --> DB
+    AuditFlt --> AuditLib --> M_Sys

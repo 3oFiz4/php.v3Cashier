@@ -1,0 +1,13 @@
+flowchart TD
+    %% System Audit Trail & Automated Database Backup (.sql.gz)
+    subgraph Audit_Trail_System ["Pencatatan Jejak Audit Imutabel (AuditLogger)"]
+        MutEvent(["Aksi Mutasi Data: Login, Harga, Stok, PO, Opname, Void, Backup"]) --> CaptureCtx["Tangkap Session (role, user_id, username),\nIP Address, User-Agent, JSON data_lama & data_baru"]
+        CaptureCtx --> InsertLog["INSERT INTO log_audit (peran_pelaku, aksi, modul, data_lama, data_baru, waktu_kejadian)"]
+    end
+
+    subgraph Database_Backup_Engine ["Mesin Pencadangan Database Otomatis & Manual (BackupService)"]
+        Trig["Pemicu: Cron CLI 'php spark db:backup'\natau Tombol Admin 'POST /api/admin/backups/run'"] --> ReadSchema["Iterasi SHOW TABLES, SHOW CREATE TABLE, dan SELECT *"]
+        ReadSchema --> CompressGz["Kompresi Dump SQL dengan gzencode(sql, level=9)"]
+        CompressGz --> WriteDisk["Simpan File ke writable/backups/ramstore_backup_YYYYMMDD_HHMMSS.sql.gz"]
+        WriteDisk --> RecordMeta["INSERT INTO riwayat_backup (nama_file, ukuran_bytes, tipe_pemicu, status_backup)"]
+    end

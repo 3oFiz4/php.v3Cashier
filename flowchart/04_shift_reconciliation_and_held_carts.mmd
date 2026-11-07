@@ -1,0 +1,18 @@
+flowchart TD
+    %% Shift Cash Reconciliation & Parked/Held Carts Workflow
+    subgraph Shift_Reconciliation ["Alur Rekonsiliasi Kas Shift Kasir"]
+        S_Start(["Buka Modal Shift [F6]"]) --> HasActive{"Ada Shift Berstatus 'Open'?"}
+        HasActive -- "Tidak" --> OpenShift["Input Modal Kas Awal Laci & Pilih Shift\nPOST /api/pos/shift/open"]
+        OpenShift --> InsertRekon["INSERT INTO rekonsiliasi_shift (status='Open')"]
+        HasActive -- "Ya" --> CountCash["Kasir Hitung Uang Tunai Fisik di Laci Akhir Shift\nPOST /api/pos/shift/close"]
+        CountCash --> CalcDiff["Hitung kas_sistem = modal_awal + penjualan_tunai_sistem\nselisih_kas = kas_fisik_akhir - kas_sistem"]
+        CalcDiff --> CloseRekon["UPDATE rekonsiliasi_shift SET selisih_kas=?, status='Closed'\nCatat ke log_audit"]
+    end
+
+    subgraph Parked_Transactions ["Alur Transaksi Tertunda (Held Carts)"]
+        H_Start(["Tekan Tombol Tunda [F4]"]) --> HasItems{"Keranjang Aktif Berisi Item?"}
+        HasItems -- "Ya" --> SaveHeld["Input Label Pelanggan & POST /api/pos/held/park\nINSERT INTO transaksi_tertunda (status_tunda='Held')"]
+        SaveHeld --> ClearTerminal["Kosongkan Keranjang untuk Melayani Pelanggan Berikutnya"]
+        HasItems -- "Tidak" --> ListHeld["Tampilkan Daftar Keranjang Tertunda\nGET /api/pos/held"]
+        ListHeld --> ResumeHeld["Klik Panggil -> POST /api/pos/held/resume/{id}\nUPDATE status_tunda='Resumed' & Pulihkan Item ke Keranjang"]
+    end

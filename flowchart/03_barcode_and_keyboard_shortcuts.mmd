@@ -1,0 +1,18 @@
+flowchart TD
+    %% Barcode Scanner Emulation & POS Keyboard Shortcuts Flowchart
+    Start(["Event window.onkeydown pada Terminal Kasir"]) --> CheckFKey{"Tombol Fungsi Ditekan?"}
+
+    CheckFKey -- "F2" --> ActF2["Cart.promptDirectQty()\nUbah Kuantitas Item Terakhir"] --> EndNode(["Selesai"])
+    CheckFKey -- "F4" --> ActF4["openParkCartModal()\nParkir / Panggil Keranjang Tertunda"] --> EndNode
+    CheckFKey -- "F6" --> ActF6["openShiftModal()\nBuka / Tutup Rekonsiliasi Kas Shift"] --> EndNode
+    CheckFKey -- "F8" --> ActF8["openPaymentModal()\nBuka Jendela Pembayaran & QRIS"] --> EndNode
+    CheckFKey -- "F9" --> ActF9["Cart.requestClearCart()\nMinta PIN Supervisor untuk Void Keranjang"] --> EndNode
+    CheckFKey -- "Enter (Saat Struk Aktif)" --> ActPrint["window.print()\nCetak Struk Thermal"] --> EndNode
+
+    CheckFKey -- "Karakter Alfanumerik" --> CheckDelta{"Selisih Waktu Antar-Ketikan\n<= 45 milidetik?"}
+    CheckDelta -- "Tidak" --> ResetBuf["Reset buffer = char_baru"] --> EndNode
+    CheckDelta -- "Ya" --> AppendBuf["Tambahkan Karakter ke buffer Barcode"]
+    AppendBuf --> IsEnterScanner{"Key === 'Enter' &\nbuffer.length >= 6?"}
+    IsEnterScanner -- "Tidak" --> EndNode
+    IsEnterScanner -- "Ya" --> LookupBarcode["triggerBarcodeLookup(buffer)\nGET /api/pos/barcode/{code}"]
+    LookupBarcode --> AddToCart["Cart.add(product, 1) & Hitung Ulang Promo"] --> EndNode

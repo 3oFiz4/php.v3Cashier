@@ -1,0 +1,21 @@
+flowchart TD
+    %% Admin Master Management (Products, Categories, FEFO Batches, Promos, Users)
+    Start(["Permintaan Admin ke MasterBarangController / MasterUserController"]) --> VerifyAdmin["AuthFilter::enforce(['admin'])"]
+    VerifyAdmin --> SwitchModule{"Modul Master?"}
+
+    SwitchModule -- "Produk (barang)" --> CrudProd["Create / Update / Delete Produk\nValidasi Barcode, Harga Beli, Harga Jual, Stok Minimum"]
+    CrudProd --> AuditProd["AuditLogger::log('barang', aksi, id, data_lama, data_baru)"]
+
+    SwitchModule -- "Kategori (jenis_barang)" --> CrudCat["Create / Update / Delete Kategori\nProteksi Foreign Key RESTRICT jika masih dipakai produk"]
+    CrudCat --> AuditCat["AuditLogger::log('jenis_barang', aksi, id)"]
+
+    SwitchModule -- "Batch FEFO (batch_barang)" --> CreateBatch["INSERT INTO batch_barang (nomor_batch, tanggal_kadaluarsa, stok_awal)\nUPDATE barang SET stok = stok + stok_awal"]
+    CreateBatch --> AuditBatch["AuditLogger::log('batch_barang', 'CREATE_BATCH')"]
+
+    SwitchModule -- "Promosi (promosi_bundling)" --> CrudPromo["Simpan / Toggle Aturan Bundle_Pair, Min_Qty_Cut, Percent_Discount"]
+    CrudPromo --> AuditPromo["AuditLogger::log('promosi_bundling', aksi)"]
+
+    SwitchModule -- "Pengguna (admin & kasir)" --> CrudUser["Enkripsi Password & PIN Supervisor dengan password_hash(BCRYPT)\nAtur Enumerasi Shift Kasir (Morning / Afternoon / Night)"]
+    CrudUser --> AuditUser["AuditLogger::log('admin/kasir', aksi)"]
+
+    AuditProd & AuditCat & AuditBatch & AuditPromo & AuditUser --> RespJSON[/"Kirim Respons JSON Sukses"/]

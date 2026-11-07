@@ -1,0 +1,25 @@
+flowchart TD
+    %% Real-Time Multi-Item Checkout, Promotional Bundling, Split/QRIS Payment & FEFO Stock Deduction
+    Start(["Mulai Checkout Kasir: POST /api/pos/checkout"]) --> ParseCart[/"Baca Payload: items[], payment_method, cash_amount, non_cash_amount"/]
+    ParseCart --> IsCartEmpty{"items[] Kosong?"}
+    IsCartEmpty -- "Ya" --> ErrEmpty["HTTP 400: Keranjang Belanja Kosong"] --> EndNode(["Selesai"])
+    IsCartEmpty -- "Tidak" --> BeginTx["PDO::beginTransaction()"]
+
+    BeginTx --> LoopLock["Iterasi Setiap Item & SELECT ... FROM barang FOR UPDATE"]
+    LoopLock --> CheckStock{"stok_barang >= jumlah_diminta?"}
+    CheckStock -- "Tidak" --> RollbackStock["PDO::rollBack()"]
+    RollbackStock --> ErrStock["HTTP 400: Stok Produk Tidak Mencukupi"] --> EndNode
+
+    CheckStock -- "Ya" --> EvalPromo["PromoEngine::evaluateCart(lockedProducts)\nHitung Diskon Bundle_Pair / Min_Qty_Cut / Percent"]
+    EvalPromo --> CheckPay{"(bayar_tunai + bayar_non_tunai) >= total_harga?"}
+    CheckPay -- "Tidak" --> RollbackPay["PDO::rollBack()"]
+    RollbackPay --> ErrPay["HTTP 400: Nominal Pembayaran Kurang dari Tagihan"] --> EndNode
+
+    CheckPay -- "Ya" --> CalcChange["Hitung kembalian = jumlah_bayar - total_harga\nGenerate Nomor Struk Unik (RMS-YYYYMMDD-XXXX)"]
+    CalcChange --> InsertHeader["INSERT INTO transaksi (no_struk, id_kasir, id_rekon, total_harga, metode_pembayaran, ...)"]
+    InsertHeader --> LoopFefo["FefoAllocator::deductFefoBatches(db, id_barang, jumlah)\nUrutkan batch_barang berdasarkan tanggal_kadaluarsa ASC"]
+    LoopFefo --> InsertDetails["INSERT INTO detail_transaksi (id_transaksi, id_barang, id_batch, harga_beli_satuan, harga_satuan, diskon_item, subtotal)"]
+    InsertDetails --> UpdateMaster["UPDATE barang SET stok = stok - jumlah WHERE id_barang = ?"]
+    UpdateMaster --> UpdateShift["UPDATE rekonsiliasi_shift SET penjualan_tunai_sistem += net_cash, penjualan_non_tunai_sistem += non_cash"]
+    UpdateShift --> CommitTx["PDO::commit() & AuditLogger::log('transaksi', 'CHECKOUT_SUCCESS')"]
+    CommitTx --> ReturnReceipt[/"Return JSON Struk Lengkap untuk Dicetak"/] --> EndNode
