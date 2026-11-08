@@ -1,0 +1,8 @@
+laporan implementasi modul manajemen admin, inventaris, analitik laba, dan cadangan database
+
+diimplementasi operasi crud penuh untuk data produk, kategori barang, batch kadaluarsa, aturan promosi, akun admin, dan akun kasir.
+diimplementasi peringatan dini stok rendah dan peringatan batch produk yang mendekati tanggal kadaluarsa tiga hari sebelumnya pada dashboard admin.
+diimplementasi manajemen purchase order dan pemasok yang secara otomatis menambah stok katalog serta membuat batch fefo baru saat faktur barang masuk disimpan.
+diimplementasi fitur stok opname untuk membandingkan jumlah fisik barang di rak terhadap saldo database dan menghasilkan laporan selisih penyusutan.
+diimplementasi analitik laba kotor dan persentase margin keuntungan dengan mengurangi harga pokok pembelian dari harga jual ritel pada setiap transaksi selesai.
+diimplementasi pencatatan jejak audit imutabel pada tabel log_audit serta layanan pencadangan database terkompresi .sql.gz melalui backupservice dan perintah cli spark.

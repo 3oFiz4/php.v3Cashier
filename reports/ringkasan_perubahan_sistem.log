@@ -1,0 +1,7 @@
+[2026-11-01] diinisialisasi repositori php.v3cashier dan kerangka dasar codeigniter 4 mvc
+[2026-11-02] dibangun migrasi tabel master admin, kasir, jenis_barang, barang, transaksi, dan detail_transaksi
+[2026-11-03] ditambahkan tabel rekonsiliasi_shift, batch_barang, pemasok, pembelian_stok, stok_opname, promosi_bundling, log_audit, dan riwayat_backup
+[2026-11-04] diimplementasi pustaka inti auditlogger, promoengine, fefoallocator, qrisgenerator, dan backupservice
+[2026-11-05] diimplementasi model dan controller mvc untuk autentikasi, kasir pos, master barang, master pengguna, dan operasional
+[2026-11-06] dibangun antarmuka pengguna responsif dengan tema terang/gelap, komponen css tailwindcss, emulasi barcode, dan pintasan keyboard pos
+[2026-11-07] ditambahkan diagram alir mermaid pada folder flowchart serta dokumentasi pengguna dan pengembang

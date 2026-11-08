@@ -1,0 +1,7 @@
+laporan implementasi modul transaksi kasir real-time dan otomatisasi stok
+
+diimplementasi manajemen transaksi multi-item pada kasirposcontroller dengan penguncian baris stok database secara atomik.
+diimplementasi kalkulasi otomatis subtotal item, potongan harga promosi bundling melalui promoengine, total belanja, serta perhitungan uang kembalian.
+diimplementasi pengurangan stok otomatis berbasis first-expired first-out melalui fefoallocator beserta penolakan otomatis apabila jumlah beli melebihi sisa stok.
+diimplementasi sistem operasi transaksi pembayaran dengan metode variatif mencakup tunai, kartu debit, dompet digital, qris dinamis ber-checksum crc16 melalui qrisgenerator, serta pembayaran terpisah atau split payment.
+ditambahkan fitur emulasi pemindai barcode usb dan nirkabel, penundaan keranjang belanja pelanggan, rekonsiliasi kas shift kasir, serta pintasan tombol keyboard f2, f4, f6, f8, f9, dan enter.

@@ -1,0 +1,5 @@
+laporan sistem autentikasi pengguna, enkripsi password, dan otorisasi supervisor
+
+diimplementasi pengamanan password dan pin supervisor menggunakan algoritma enkripsi bcrypt pada authcontroller, adminmodel, dan kasirmodel.
+diterapkan pembatasan hak akses berbasis sesi dan peran melalui authfilter untuk menjaga pemisahan modul admin dan modul kasir.
+diimplementasi verifikasi pin supervisor pada fitur void dan refund sehingga kasir wajib meminta otorisasi admin sebelum menghapus item keranjang atau membatalkan transaksi.

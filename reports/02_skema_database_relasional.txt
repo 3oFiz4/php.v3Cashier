@@ -1,0 +1,6 @@
+laporan perancangan skema database relasional dan data awal
+
+diimplementasi skema database relasional innodb pada sql/ramstore_schema_seed.sql serta migrasi codeigniter 4 pada app/database/migrations.
+dibentuk tabel utama admin, kasir dengan enumerasi shift morning afternoon night, jenis_barang, barang dengan foreign key ke jenis_barang, transaksi, dan detail_transaksi.
+ditambahkan tabel operasional lanjutan meliputi rekonsiliasi_shift, batch_barang untuk antrean fefo, pemasok, pembelian_stok, detail_pembelian_stok, transaksi_tertunda, otorisasi_void, stok_opname, promosi_bundling, log_audit, dan riwayat_backup.
+diisi data awal akun admin, akun kasir tiga shift, kategori minimarket, katalog produk ber-barcode, batch kadaluarsa, pemasok, dan aturan promosi bundling.

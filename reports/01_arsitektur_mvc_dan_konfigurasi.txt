@@ -1,0 +1,6 @@
+laporan implementasi arsitektur mvc codeigniter 4 dan konfigurasi dasar
+
+dibangun struktur kerangka kerja codeigniter 4 mvc untuk aplikasi point of sale minimarket ramstore pada repositori php.v3cashier.
+dikonfigurasi variabel lingkungan pada file env dan .env mencakup parameter koneksi database ramstore_pos, identitas toko, prefiks struk, ambang stok rendah, peringatan kadaluarsa, serta kredensial merchant qris.
+dibuat front controller pada public/index.php beserta pemetaan rute lengkap pada app/config/routes.php untuk memisahkan akses peran admin dan kasir.
+ditambahkan alur kerja otomatis github actions pada .github/workflows/php.yml guna memvalidasi sintaks seluruh file php dan kesiapan direktori penyimpanan.
