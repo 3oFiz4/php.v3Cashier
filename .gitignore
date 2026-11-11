@@ -10,3 +10,7 @@ writable/uploads/*
 !writable/uploads/index.html
 .DS_Store
 Thumbs.db
+
+# PHP CS Fixer configuration
+/.php-cs-fixer.cache
+/.php-cs-fixer.php
