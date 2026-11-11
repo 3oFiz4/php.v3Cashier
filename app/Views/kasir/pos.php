@@ -26,6 +26,9 @@
           <img src="/svg/hold.svg" alt="" class="svg-icon" /> Keranjang Tunda (<span id="heldCountBadge">0</span>) [F4]
         </button>
         <button class="btn btn-sm" onclick="openCashierHistoryModal()"><img src="/svg/transactions.svg" alt="" class="svg-icon" /> Riwayat Transaksi</button>
+        <button class="btn btn-sm" onclick="openCashierShortcutsModal()" title="Pintasan Keyboard [F1]">
+          <img src="/svg/dashboard.svg" alt="" class="svg-icon svg-icon-sm" /> Shortcuts [F1]
+        </button>
         <?php if (($user['role'] ?? '') === 'admin'): ?>
           <a href="/admin" class="btn btn-sm btn-dark">Panel Admin</a>
         <?php endif; ?>
@@ -101,12 +104,17 @@
 
     <div class="shortcut-bar">
       <div>
-        <span class="kbd-badge">F2</span> Ubah Qty Item &nbsp;
-        <span class="kbd-badge">F4</span> Parkir/Panggil Keranjang &nbsp;
-        <span class="kbd-badge">F6</span> Rekonsiliasi Kas Shift &nbsp;
-        <span class="kbd-badge">F8</span> Buka Pembayaran &nbsp;
-        <span class="kbd-badge">F9</span> Void Supervisor &nbsp;
-        <span class="kbd-badge">Enter</span> Cetak Struk
+        <span class="kbd-badge">F1</span> Bantuan &nbsp;
+        <span class="kbd-badge">F2</span> Qty &nbsp;
+        <span class="kbd-badge">F3</span> Cari &nbsp;
+        <span class="kbd-badge">F4</span> Parkir &nbsp;
+        <span class="kbd-badge">F6</span> Shift Kas &nbsp;
+        <span class="kbd-badge">F7</span> Riwayat &nbsp;
+        <span class="kbd-badge">F8</span> Bayar &nbsp;
+        <span class="kbd-badge">F9</span> Void &nbsp;
+        <span class="kbd-badge">F10</span> Tertunda &nbsp;
+        <span class="kbd-badge">Esc</span> Tutup &nbsp;
+        <span class="kbd-badge">Enter</span> Struk
       </div>
       <div>Emulasi USB/Wireless Barcode Scanner: <strong>Aktif (&lt;45ms burst)</strong></div>
     </div>
@@ -254,6 +262,53 @@
         <div class="modal-footer">
           <button class="btn" onclick="closeReceiptModal()">Tutup</button>
           <button class="btn btn-dark" onclick="printReceipt()"><img src="/svg/printer.svg" alt="" class="svg-icon" /> Cetak Struk [Enter]</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="cashierShortcutsModal">
+      <div class="modal" style="max-width: 580px">
+        <div class="modal-header">
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;">
+            <img src="/svg/dashboard.svg" alt="" class="svg-icon" />
+            <span>Pintasan Keyboard Terminal Kasir</span>
+          </h3>
+          <button class="modal-close" onclick="closeCashierShortcutsModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;font-size:0.84rem;">
+            <div class="card" style="padding:0.75rem;">
+              <div style="font-weight:700;margin-bottom:0.5rem;color:var(--secondary);">Pintasan Transaksi</div>
+              <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                <div><span class="kbd-badge">F1</span> Buka / Tutup Bantuan</div>
+                <div><span class="kbd-badge">F2</span> Ubah Kuantitas (Qty)</div>
+                <div><span class="kbd-badge">F3</span> Fokus Pencarian Barang</div>
+                <div><span class="kbd-badge">F4</span> Parkir / Tunda Transaksi</div>
+                <div><span class="kbd-badge">F6</span> Rekonsiliasi Kas Shift</div>
+                <div><span class="kbd-badge">F7</span> Riwayat Transaksi</div>
+                <div><span class="kbd-badge">F8</span> Buka Pembayaran</div>
+                <div><span class="kbd-badge">F9</span> Void Supervisor</div>
+                <div><span class="kbd-badge">F10</span> Panggil Keranjang Tunda</div>
+              </div>
+            </div>
+            <div class="card" style="padding:0.75rem;">
+              <div style="font-weight:700;margin-bottom:0.5rem;color:var(--secondary);">Pintasan Pembayaran &amp; Sistem</div>
+              <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                <div><span class="kbd-badge">1</span> / <span class="kbd-badge">Alt+1</span> Metode Tunai (Cash)</div>
+                <div><span class="kbd-badge">2</span> / <span class="kbd-badge">Alt+2</span> Metode QRIS Dinamis</div>
+                <div><span class="kbd-badge">3</span> / <span class="kbd-badge">Alt+3</span> Metode Split Payment</div>
+                <div><span class="kbd-badge">4</span> / <span class="kbd-badge">Alt+4</span> Kartu Debit / EDC</div>
+                <div><span class="kbd-badge">5</span> / <span class="kbd-badge">Alt+5</span> Dompet Digital (E-Wallet)</div>
+                <div><span class="kbd-badge">Enter</span> Konfirmasi Bayar / Cetak Struk</div>
+                <div><span class="kbd-badge">Alt + B</span> Fokus Emulasi Scanner</div>
+                <div><span class="kbd-badge">Alt + D</span> Toggle Mode Gelap / Terang</div>
+                <div><span class="kbd-badge">Escape</span> Tutup Dialog / Batal</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" onclick="closeCashierShortcutsModal()">Tutup [Esc]</button>
         </div>
       </div>
     </div>
