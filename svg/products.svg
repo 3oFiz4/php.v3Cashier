@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="boxTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="boxLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="boxRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#92400E"/>
+      <stop offset="100%" stop-color="#78350F"/>
+    </linearGradient>
+  </defs>
+  <!-- Isometric Box -->
+  <path d="M16 3 L28 9 L16 15 L4 9 Z" fill="url(#boxTop)"/>
+  <path d="M4 9 L16 15 V28 L4 22 Z" fill="url(#boxLeft)"/>
+  <path d="M16 15 L28 9 V22 L16 28 Z" fill="url(#boxRight)"/>
+  <path d="M13 4.5 L22 9 L19 10.5 L10 6 Z" fill="#3B82F6" opacity="0.8"/>
+  <polygon points="6,14 12,17 12,23 6,20" fill="#FFFFFF"/>
+  <line x1="7.5" y1="15.5" x2="7.5" y2="19" stroke="#1E293B" stroke-width="0.8"/>
+  <line x1="9" y1="16.3" x2="9" y2="19.8" stroke="#1E293B" stroke-width="1.2"/>
+  <line x1="10.5" y1="17" x2="10.5" y2="20.5" stroke="#1E293B" stroke-width="0.8"/>
+  <circle cx="24" cy="21" r="4.5" fill="#10B981" stroke="#FFFFFF" stroke-width="1"/>
+  <path d="M22 21 L23.5 22.5 L26 19.5" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

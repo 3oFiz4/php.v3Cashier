@@ -778,3 +778,33 @@ body {
     top: 0;
   }
 }
+
+/* multicolor svg icons & brand logo */
+.brand-logo-svg {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.svg-icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.svg-icon-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.svg-icon-lg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+

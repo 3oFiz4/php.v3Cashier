@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="dashBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EEF2FF"/>
+      <stop offset="100%" stop-color="#E0E7FF"/>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="4" width="26" height="24" rx="3" fill="url(#dashBg)" stroke="#6366F1" stroke-width="1.5"/>
+  <!-- Top Bar -->
+  <rect x="6" y="7" width="8" height="3" rx="1" fill="#6366F1"/>
+  <circle cx="23" cy="8.5" r="1.5" fill="#10B981"/>
+  <circle cx="19" cy="8.5" r="1.5" fill="#F59E0B"/>
+  <!-- Chart Bars -->
+  <rect x="6" y="18" width="4" height="7" rx="1" fill="#3B82F6"/>
+  <rect x="12" y="14" width="4" height="11" rx="1" fill="#10B981"/>
+  <rect x="18" y="11" width="4" height="14" rx="1" fill="#F59E0B"/>
+  <rect x="24" y="16" width="4" height="9" rx="1" fill="#EC4899"/>
+  <!-- Trend Line -->
+  <path d="M8 17 L14 13 L20 10 L26 14" fill="none" stroke="#4F46E5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="userBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="userShirt" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+  </defs>
+  <circle cx="16" cy="16" r="14" fill="url(#userBg)"/>
+  <circle cx="16" cy="11.5" r="4.8" fill="#FDE047" stroke="#D97706" stroke-width="0.6"/>
+  <path d="M11 11 C11 7 21 7 21 11 C19 10 17 10 16 10 C13 10 12 10.5 11 11 Z" fill="#1E293B"/>
+  <path d="M7 26 C7 20 11 18.5 16 18.5 C21 18.5 25 20 25 26 Z" fill="url(#userShirt)"/>
+  <polygon points="16,22 13.5,18.5 18.5,18.5" fill="#FFFFFF"/>
+</svg>
