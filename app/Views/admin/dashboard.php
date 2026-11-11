@@ -10,14 +10,17 @@
   <body>
     <nav class="nav">
       <div class="nav-brand">
-        <span>🏪 Ramstore Admin Dashboard</span>
+        <span style="display:inline-flex;align-items:center;gap:0.45rem;">
+          <img src="/svg/ramstore-logo.svg" alt="Ramstore Admin Logo" class="brand-logo-svg" />
+          <span>Ramstore Admin Dashboard</span>
+        </span>
         <span class="badge badge-blue">v3Cashier CI4</span>
       </div>
       <div class="nav-actions">
         <span style="font-size: 0.84rem; color: var(--text-muted)">
           Halo, <strong><?= htmlspecialchars($user['full_name'] ?? 'Administrator') ?></strong>
         </span>
-        <a href="/pos" class="btn btn-sm">🛒 Terminal Kasir</a>
+        <a href="/pos" class="btn btn-sm"><img src="/svg/cart.svg" alt="" class="svg-icon" /> Terminal Kasir</a>
         <button class="btn btn-sm" id="themeToggleBtn" onclick="ThemeManager.toggle()">🌙 Dark</button>
         <button class="btn btn-sm btn-danger" id="logoutBtn">Keluar</button>
       </div>
@@ -26,16 +29,16 @@
     <div class="admin-layout">
       <div class="admin-sidebar">
         <nav class="sidebar-nav">
-          <button class="sidebar-link active" data-tab="dashboard">📊 Dashboard &amp; Peringatan</button>
-          <button class="sidebar-link" data-tab="products">📦 Produk &amp; Batch FEFO</button>
-          <button class="sidebar-link" data-tab="categories">🏷️ Kategori Barang</button>
-          <button class="sidebar-link" data-tab="users">👥 Akun Admin &amp; Kasir</button>
-          <button class="sidebar-link" data-tab="analytics">📈 Analitik Laba &amp; Margin</button>
-          <button class="sidebar-link" data-tab="po">🚚 PO &amp; Pemasok</button>
-          <button class="sidebar-link" data-tab="opname">📋 Stok Opname &amp; Selisih</button>
-          <button class="sidebar-link" data-tab="promos">🎁 Promosi &amp; Bundling</button>
-          <button class="sidebar-link" data-tab="transactions">🧾 Transaksi, Shift &amp; Void</button>
-          <button class="sidebar-link" data-tab="audit">🛡️ Audit Trail &amp; Backup</button>
+          <button class="sidebar-link active" data-tab="dashboard"><img src="/svg/dashboard.svg" alt="" class="svg-icon" /> Dashboard &amp; Peringatan</button>
+          <button class="sidebar-link" data-tab="products"><img src="/svg/products.svg" alt="" class="svg-icon" /> Produk &amp; Batch FEFO</button>
+          <button class="sidebar-link" data-tab="categories"><img src="/svg/categories.svg" alt="" class="svg-icon" /> Kategori Barang</button>
+          <button class="sidebar-link" data-tab="users"><img src="/svg/users.svg" alt="" class="svg-icon" /> Akun Admin &amp; Kasir</button>
+          <button class="sidebar-link" data-tab="analytics"><img src="/svg/analytics.svg" alt="" class="svg-icon" /> Analitik Laba &amp; Margin</button>
+          <button class="sidebar-link" data-tab="po"><img src="/svg/suppliers.svg" alt="" class="svg-icon" /> PO &amp; Pemasok</button>
+          <button class="sidebar-link" data-tab="opname"><img src="/svg/stock-opname.svg" alt="" class="svg-icon" /> Stok Opname &amp; Selisih</button>
+          <button class="sidebar-link" data-tab="promos"><img src="/svg/promotions.svg" alt="" class="svg-icon" /> Promosi &amp; Bundling</button>
+          <button class="sidebar-link" data-tab="transactions"><img src="/svg/transactions.svg" alt="" class="svg-icon" /> Transaksi, Shift &amp; Void</button>
+          <button class="sidebar-link" data-tab="audit"><img src="/svg/audit.svg" alt="" class="svg-icon" /> Audit Trail &amp; Backup</button>
         </nav>
       </div>
 
@@ -47,7 +50,7 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem">
             <div class="card">
               <div class="section-header">
-                <h3 style="font-weight:700;">⚠️ Peringatan Stok Rendah (Low-Stock Alerts)</h3>
+                <h3 style="font-weight:700;display:inline-flex;align-items:center;gap:0.4rem;"><img src="/svg/warning.svg" alt="" class="svg-icon" /> Peringatan Stok Rendah (Low-Stock Alerts)</h3>
               </div>
               <table class="data-table">
                 <thead>
@@ -64,7 +67,7 @@
 
             <div class="card">
               <div class="section-header">
-                <h3 style="font-weight:700;">⏳ Peringatan Batch Mendekati Kadaluarsa (FEFO ≤ 3 Hari)</h3>
+                <h3 style="font-weight:700;display:inline-flex;align-items:center;gap:0.4rem;"><img src="/svg/expiry.svg" alt="" class="svg-icon" /> Peringatan Batch Mendekati Kadaluarsa (FEFO ≤ 3 Hari)</h3>
               </div>
               <table class="data-table">
                 <thead>
@@ -434,7 +437,7 @@
         <div class="admin-tab" id="tab-audit">
           <div class="section-header">
             <h2 style="font-size: 1.4rem; font-weight: 700">Jejak Audit Sistem (Audit Trail) &amp; Pencadangan Database (.sql.gz)</h2>
-            <button class="btn btn-dark" onclick="runDatabaseBackupNow()">💾 Jalankan Backup Database (.sql.gz) Sekarang</button>
+            <button class="btn btn-dark" onclick="runDatabaseBackupNow()"><img src="/svg/backup.svg" alt="" class="svg-icon" /> Jalankan Backup Database (.sql.gz) Sekarang</button>
           </div>
 
           <div class="card" style="margin-bottom:1.5rem;">
