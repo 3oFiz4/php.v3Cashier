@@ -10,19 +10,22 @@
   <body>
     <nav class="nav">
       <div class="nav-brand">
-        <span>🏪 Ramstore POS</span>
+        <span style="display:inline-flex;align-items:center;gap:0.45rem;">
+          <img src="/svg/ramstore-logo.svg" alt="Ramstore POS Logo" class="brand-logo-svg" />
+          <span>Ramstore POS</span>
+        </span>
         <span id="shiftStatusBadge" class="badge badge-green">Shift: Memuat...</span>
       </div>
       <div class="nav-actions">
         <span id="clock" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500"></span>
-        <span style="font-size: 0.82rem; font-weight: 600">
-          👤 <?= htmlspecialchars($user['full_name'] ?? 'Kasir') ?> (<?= htmlspecialchars($user['shift'] ?? 'Morning') ?>)
+        <span style="font-size: 0.82rem; font-weight: 600; display:inline-flex; align-items:center; gap:0.35rem;">
+          <img src="/svg/user.svg" alt="" class="svg-icon svg-icon-sm" /> <?= htmlspecialchars($user['full_name'] ?? 'Kasir') ?> (<?= htmlspecialchars($user['shift'] ?? 'Morning') ?>)
         </span>
-        <button class="btn btn-sm" onclick="openShiftModal()">⚖️ Rekonsiliasi Kas [F6]</button>
+        <button class="btn btn-sm" onclick="openShiftModal()"><img src="/svg/reconciliation.svg" alt="" class="svg-icon" /> Rekonsiliasi Kas [F6]</button>
         <button class="btn btn-sm" onclick="openHeldListModal()">
-          ⏸️ Keranjang Tunda (<span id="heldCountBadge">0</span>) [F4]
+          <img src="/svg/hold.svg" alt="" class="svg-icon" /> Keranjang Tunda (<span id="heldCountBadge">0</span>) [F4]
         </button>
-        <button class="btn btn-sm" onclick="openCashierHistoryModal()">🧾 Riwayat Transaksi</button>
+        <button class="btn btn-sm" onclick="openCashierHistoryModal()"><img src="/svg/transactions.svg" alt="" class="svg-icon" /> Riwayat Transaksi</button>
         <?php if (($user['role'] ?? '') === 'admin'): ?>
           <a href="/admin" class="btn btn-sm btn-dark">Panel Admin</a>
         <?php endif; ?>
@@ -39,7 +42,7 @@
             id="barcodeScannerInput"
             class="search-input"
             style="max-width: 240px; font-family: monospace;"
-            placeholder="🔫 Scan Barcode + Enter..."
+            placeholder="Scan Barcode + Enter..."
           />
           <input
             type="text"
@@ -63,14 +66,14 @@
               <span class="cart-count" id="cartCount">0</span>
             </div>
             <div style="display:flex;gap:0.35rem;">
-              <button class="btn btn-sm" onclick="openParkCartModal()" title="Parkir / Tunda Keranjang (F4)">⏸️ Tunda</button>
-              <button class="btn btn-sm btn-danger" onclick="Cart.requestClearCart()" title="Void Seluruh Keranjang (F9)">🗑️ Void</button>
+              <button class="btn btn-sm" onclick="openParkCartModal()" title="Parkir / Tunda Keranjang (F4)"><img src="/svg/hold.svg" alt="" class="svg-icon svg-icon-sm" /> Tunda</button>
+              <button class="btn btn-sm btn-danger" onclick="Cart.requestClearCart()" title="Void Seluruh Keranjang (F9)"><img src="/svg/trash.svg" alt="" class="svg-icon svg-icon-sm" /> Void</button>
             </div>
           </div>
 
           <div class="cart-items" id="cartItems">
             <div class="cart-empty">
-              <span style="font-size: 2.5rem;">🛒</span>
+              <img src="/svg/cart.svg" alt="" style="width: 3.5rem; height: 3.5rem; margin-bottom: 0.5rem;" />
               <span>Keranjang belanja kosong</span>
             </div>
           </div>
@@ -111,7 +114,7 @@
     <div class="modal-overlay" id="paymentModal">
       <div class="modal">
         <div class="modal-header">
-          <h3>💳 Pembayaran Multi-Metode &amp; QRIS</h3>
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;"><img src="/svg/payment.svg" alt="" class="svg-icon" /> Pembayaran Multi-Metode &amp; QRIS</h3>
           <button class="modal-close" onclick="closePaymentModal()">×</button>
         </div>
         <div class="modal-body">
@@ -140,7 +143,7 @@
           </div>
 
           <div id="qrisContainer" style="display:none;background:var(--accent);padding:1rem;border-radius:10px;margin-bottom:1rem;text-align:center;">
-            <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">📱 Pindai Kode QRIS Dinamis</div>
+            <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;display:inline-flex;align-items:center;gap:0.4rem;justify-content:center;"><img src="/svg/qris.svg" alt="" class="svg-icon" /> Pindai Kode QRIS Dinamis</div>
             <div id="qrisAmountDisplay" style="font-size:1.1rem;font-weight:700;color:#059669;margin-bottom:0.4rem;">Rp 0</div>
             <div style="background:#fff;color:#111;padding:0.75rem;border-radius:8px;font-family:monospace;font-size:0.68rem;word-break:break-all;border:2px dashed #111;" id="qrisStringDisplay"></div>
             <input type="hidden" id="qrisRefInput" value="" />
@@ -163,7 +166,7 @@
     <div class="modal-overlay" id="supervisorModal">
       <div class="modal" style="max-width:420px;">
         <div class="modal-header">
-          <h3>🔐 Otorisasi Supervisor (Void Override)</h3>
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;"><img src="/svg/supervisor.svg" alt="" class="svg-icon" /> Otorisasi Supervisor (Void Override)</h3>
           <button class="modal-close" onclick="closeSupervisorModal()">×</button>
         </div>
         <div class="modal-body">
@@ -187,7 +190,7 @@
     <div class="modal-overlay" id="heldModal">
       <div class="modal" style="max-width:600px;">
         <div class="modal-header">
-          <h3>⏸️ Daftar Transaksi Tertunda (Parked Carts)</h3>
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;"><img src="/svg/hold.svg" alt="" class="svg-icon" /> Daftar Transaksi Tertunda (Parked Carts)</h3>
           <button class="modal-close" onclick="closeHeldModal()">×</button>
         </div>
         <div class="modal-body">
@@ -209,7 +212,7 @@
     <div class="modal-overlay" id="shiftModal">
       <div class="modal" style="max-width:480px;">
         <div class="modal-header">
-          <h3>⚖️ Rekonsiliasi Kas Shift Kasir</h3>
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;"><img src="/svg/reconciliation.svg" alt="" class="svg-icon" /> Rekonsiliasi Kas Shift Kasir</h3>
           <button class="modal-close" onclick="closeShiftModal()">×</button>
         </div>
         <div class="modal-body" id="shiftModalBody"></div>
@@ -219,7 +222,7 @@
     <div class="modal-overlay" id="historyModal">
       <div class="modal" style="max-width:680px;">
         <div class="modal-header">
-          <h3>🧾 Riwayat Transaksi Kasir</h3>
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;"><img src="/svg/transactions.svg" alt="" class="svg-icon" /> Riwayat Transaksi Kasir</h3>
           <button class="modal-close" onclick="closeHistoryModal()">×</button>
         </div>
         <div class="modal-body">
@@ -242,7 +245,7 @@
     <div class="modal-overlay" id="receiptModal">
       <div class="modal" style="max-width: 400px">
         <div class="modal-header">
-          <h3>🧾 Struk Pembayaran</h3>
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;"><img src="/svg/transactions.svg" alt="" class="svg-icon" /> Struk Pembayaran</h3>
           <button class="modal-close" onclick="closeReceiptModal()">×</button>
         </div>
         <div class="modal-body">
@@ -250,7 +253,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn" onclick="closeReceiptModal()">Tutup</button>
-          <button class="btn btn-dark" onclick="printReceipt()">🖨️ Cetak Struk [Enter]</button>
+          <button class="btn btn-dark" onclick="printReceipt()"><img src="/svg/printer.svg" alt="" class="svg-icon" /> Cetak Struk [Enter]</button>
         </div>
       </div>
     </div>
