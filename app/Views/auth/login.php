@@ -10,7 +10,10 @@
   <body>
     <nav class="nav">
       <div class="nav-brand">
-        <span>🏪 Ramstore POS</span>
+        <span style="display:inline-flex;align-items:center;gap:0.45rem;">
+          <img src="/svg/ramstore-logo.svg" alt="Ramstore POS Logo" class="brand-logo-svg" />
+          <span>Ramstore POS</span>
+        </span>
         <span class="badge badge-blue">CodeIgniter 4 MVC</span>
       </div>
       <div class="nav-actions">
