@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupAdminNavigation();
   loadDashboardSummary();
   loadCategoriesDropdown();
+  initAdminShortcuts();
 });
 
 // atur perpindahan tab menu samping pada panel admin
@@ -330,12 +331,64 @@ async function loadAdminCategories() {
         <td>${escapeHtml(c.deskripsi || "-")}</td>
         <td>${c.product_count} produk</td>
         <td>
-          <button class="btn btn-sm btn-danger" onclick="deleteCategory(${c.id_jenis})">Hapus</button>
+          <div style="display:flex;gap:0.4rem;align-items:center;">
+            <button class="btn btn-sm btn-dark" onclick="openEditCategoryModal(${c.id_jenis})">Modif</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteCategory(${c.id_jenis})">Hapus</button>
+          </div>
         </td>
       </tr>
     `
     )
     .join("");
+}
+
+function openEditCategoryModal(id) {
+  const cat = adminCategories.find((c) => Number(c.id_jenis) === Number(id));
+  if (!cat) return;
+  document.getElementById("editCategoryId").value = cat.id_jenis;
+  document.getElementById("editCategoryName").value = cat.nama_jenis || "";
+  document.getElementById("editCategoryDesc").value = cat.deskripsi || "";
+  const modal = document.getElementById("categoryModal");
+  if (modal) {
+    modal.classList.add("active");
+    setTimeout(() => {
+      const nameInput = document.getElementById("editCategoryName");
+      if (nameInput) {
+        nameInput.focus();
+        nameInput.select();
+      }
+    }, 100);
+  }
+}
+
+function closeCategoryModal() {
+  const modal = document.getElementById("categoryModal");
+  if (modal) {
+    modal.classList.remove("active");
+  }
+}
+
+async function updateCategory() {
+  const id = document.getElementById("editCategoryId").value;
+  const nama = document.getElementById("editCategoryName").value.trim();
+  const desk = document.getElementById("editCategoryDesc").value.trim();
+  if (!nama) {
+    showAdminToast("Nama kategori wajib diisi", "error");
+    return;
+  }
+  const res = await fetch("/api/admin/categories/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_jenis: id, nama_jenis: nama, deskripsi: desk }),
+  });
+  const data = await res.json();
+  if (data.success) {
+    closeCategoryModal();
+    await loadAdminCategories();
+    showAdminToast(data.message || "Kategori berhasil diperbarui");
+  } else {
+    showAdminToast(data.error || "Gagal memperbarui kategori", "error");
+  }
 }
 
 async function saveCategory() {
@@ -857,4 +910,107 @@ function showAdminToast(message, type = "success") {
   toast.textContent = message;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
+}
+
+// kelola modal bantuan dan pintasan keyboard panel admin
+function openAdminShortcutsModal() {
+  const m = document.getElementById("adminShortcutsModal");
+  if (m) m.classList.add("active");
+}
+
+function closeAdminShortcutsModal() {
+  const m = document.getElementById("adminShortcutsModal");
+  if (m) m.classList.remove("active");
+}
+
+function switchAdminTab(tab) {
+  const link = document.querySelector(`.sidebar-link[data-tab="${tab}"]`);
+  if (link) {
+    link.click();
+  }
+}
+
+function initAdminShortcuts() {
+  window.addEventListener("keydown", (e) => {
+    // F1: Tampilkan / sembunyikan bantuan pintasan keyboard admin
+    if (e.key === "F1") {
+      e.preventDefault();
+      const m = document.getElementById("adminShortcutsModal");
+      if (m && m.classList.contains("active")) {
+        closeAdminShortcutsModal();
+      } else {
+        openAdminShortcutsModal();
+      }
+      return;
+    }
+
+    // Escape: Tutup modal apapun yang aktif
+    if (e.key === "Escape") {
+      closeProductModal();
+      closeCategoryModal();
+      closeAdminShortcutsModal();
+      return;
+    }
+
+    // Alt + K: Pergi ke terminal kasir POS
+    if (e.altKey && (e.key === "k" || e.key === "K")) {
+      e.preventDefault();
+      window.location.href = "/pos";
+      return;
+    }
+
+    // Alt + D: Toggle tema gelap/terang
+    if (e.altKey && (e.key === "d" || e.key === "D")) {
+      e.preventDefault();
+      if (typeof ThemeManager !== "undefined") ThemeManager.toggle();
+      return;
+    }
+
+    // Alt + B: Jalankan pencadangan database sekarang
+    if (e.altKey && (e.key === "b" || e.key === "B")) {
+      e.preventDefault();
+      runDatabaseBackupNow();
+      return;
+    }
+
+    // Alt + N atau F2: Tambah produk / kategori kontekstual
+    if ((e.altKey && (e.key === "n" || e.key === "N")) || e.key === "F2") {
+      e.preventDefault();
+      const activeLink = document.querySelector(".sidebar-link.active");
+      const currentTab = activeLink ? activeLink.dataset.tab : "dashboard";
+      if (currentTab === "products") {
+        openProductModal();
+      } else if (currentTab === "categories") {
+        const catInput = document.getElementById("categoryNameInput");
+        if (catInput) {
+          catInput.focus();
+          catInput.select();
+        }
+      } else {
+        openProductModal();
+      }
+      return;
+    }
+
+    // Alt + Angka 1..0: Navigasi tab menu admin cepat
+    if (e.altKey) {
+      const tabMap = {
+        "1": "dashboard",
+        "2": "products",
+        "3": "categories",
+        "4": "users",
+        "5": "analytics",
+        "6": "po",
+        "7": "opname",
+        "8": "promos",
+        "9": "transactions",
+        "0": "audit",
+      };
+      if (tabMap[e.key]) {
+        e.preventDefault();
+        switchAdminTab(tabMap[e.key]);
+        return;
+      }
+    }
+  });
 }

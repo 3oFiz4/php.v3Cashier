@@ -20,6 +20,9 @@
         <span style="font-size: 0.84rem; color: var(--text-muted)">
           Halo, <strong><?= htmlspecialchars($user['full_name'] ?? 'Administrator') ?></strong>
         </span>
+        <button class="btn btn-sm" onclick="openAdminShortcutsModal()" title="Pintasan Keyboard [F1]">
+          <img src="/svg/dashboard.svg" alt="" class="svg-icon svg-icon-sm" /> Shortcuts [F1]
+        </button>
         <a href="/pos" class="btn btn-sm"><img src="/svg/cart.svg" alt="" class="svg-icon" /> Terminal Kasir</a>
         <button class="btn btn-sm" id="themeToggleBtn" onclick="ThemeManager.toggle()">🌙 Dark</button>
         <button class="btn btn-sm btn-danger" id="logoutBtn">Keluar</button>
@@ -167,8 +170,8 @@
           <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom:1rem;">Manajemen Kategori Barang (jenis_barang)</h2>
           <div class="card" style="margin-bottom:1.25rem;">
             <div style="display:grid;grid-template-columns:1fr 2fr auto;gap:0.75rem;">
-              <input type="text" id="categoryNameInput" class="form-input" placeholder="Nama Kategori Baru" />
-              <input type="text" id="categoryDescInput" class="form-input" placeholder="Deskripsi Kategori" />
+              <input type="text" id="categoryNameInput" class="form-input" placeholder="Nama Kategori Baru" onkeydown="if(event.key==='Enter') saveCategory()" />
+              <input type="text" id="categoryDescInput" class="form-input" placeholder="Deskripsi Kategori" onkeydown="if(event.key==='Enter') saveCategory()" />
               <button class="btn btn-dark" onclick="saveCategory()">+ Tambah Kategori</button>
             </div>
           </div>
@@ -472,6 +475,93 @@
               <tbody id="auditLogsTableBody"></tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shortcut-bar">
+      <div>
+        <span class="kbd-badge">F1</span> Bantuan Pintasan &nbsp;
+        <span class="kbd-badge">Alt+1..0</span> Navigasi Tab &nbsp;
+        <span class="kbd-badge">Alt+N / F2</span> Entri Baru &nbsp;
+        <span class="kbd-badge">Alt+B</span> Backup Database &nbsp;
+        <span class="kbd-badge">Alt+K</span> Terminal Kasir &nbsp;
+        <span class="kbd-badge">Alt+D</span> Tema Gelap/Terang &nbsp;
+        <span class="kbd-badge">Esc</span> Tutup Modal
+      </div>
+      <div>Sistem Admin Ramstore: <strong>v3Cashier CI4</strong></div>
+    </div>
+
+    <div class="modal-overlay" id="categoryModal">
+      <div class="modal" style="max-width: 480px;">
+        <div class="modal-header">
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;">
+            <img src="/svg/categories.svg" alt="" class="svg-icon" />
+            <span>Modif Kategori Barang</span>
+          </h3>
+          <button class="modal-close" onclick="closeCategoryModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <form id="categoryEditForm" onsubmit="event.preventDefault(); updateCategory();">
+            <input type="hidden" id="editCategoryId" />
+            <div class="form-group" style="margin-bottom: 0.85rem;">
+              <label class="form-label">Nama Kategori *</label>
+              <input type="text" id="editCategoryName" class="form-input" placeholder="Nama Kategori" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Deskripsi Kategori</label>
+              <textarea id="editCategoryDesc" class="form-input" rows="3" placeholder="Deskripsi Kategori (opsional)"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" onclick="closeCategoryModal()">Batal</button>
+          <button type="button" class="btn btn-dark" onclick="updateCategory()">Simpan Perubahan</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="adminShortcutsModal">
+      <div class="modal" style="max-width: 580px;">
+        <div class="modal-header">
+          <h3 style="display:inline-flex;align-items:center;gap:0.45rem;">
+            <img src="/svg/dashboard.svg" alt="" class="svg-icon" />
+            <span>Pintasan Keyboard Panel Admin</span>
+          </h3>
+          <button class="modal-close" onclick="closeAdminShortcutsModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;font-size:0.84rem;">
+            <div class="card" style="padding:0.75rem;">
+              <div style="font-weight:700;margin-bottom:0.5rem;color:var(--secondary);">Pintasan Operasional</div>
+              <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                <div><span class="kbd-badge">F1</span> Buka / Tutup Bantuan</div>
+                <div><span class="kbd-badge">Alt + N</span> / <span class="kbd-badge">F2</span> Tambah Data / Entri Baru</div>
+                <div><span class="kbd-badge">Alt + B</span> Backup Database (.sql.gz)</div>
+                <div><span class="kbd-badge">Alt + K</span> Pergi ke Terminal Kasir</div>
+                <div><span class="kbd-badge">Alt + D</span> Toggle Mode Gelap / Terang</div>
+                <div><span class="kbd-badge">Escape</span> Tutup Modal Aktif</div>
+              </div>
+            </div>
+            <div class="card" style="padding:0.75rem;">
+              <div style="font-weight:700;margin-bottom:0.5rem;color:var(--secondary);">Pintasan Navigasi Tab</div>
+              <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                <div><span class="kbd-badge">Alt + 1</span> Dashboard &amp; Peringatan</div>
+                <div><span class="kbd-badge">Alt + 2</span> Produk &amp; Batch FEFO</div>
+                <div><span class="kbd-badge">Alt + 3</span> Kategori Barang</div>
+                <div><span class="kbd-badge">Alt + 4</span> Akun Admin &amp; Kasir</div>
+                <div><span class="kbd-badge">Alt + 5</span> Analitik Margin &amp; Laba</div>
+                <div><span class="kbd-badge">Alt + 6</span> PO &amp; Pemasok</div>
+                <div><span class="kbd-badge">Alt + 7</span> Stok Opname &amp; Selisih</div>
+                <div><span class="kbd-badge">Alt + 8</span> Promosi &amp; Bundling</div>
+                <div><span class="kbd-badge">Alt + 9</span> Transaksi &amp; Shift</div>
+                <div><span class="kbd-badge">Alt + 0</span> Audit Trail &amp; Backup</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-dark" onclick="closeAdminShortcutsModal()">Tutup [Esc]</button>
         </div>
       </div>
     </div>
